@@ -10,13 +10,15 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://www.npmjs.com/search?q=keywords:karma-adapter
-    frameworks: ['jasmine'],
+    frameworks: ['jasmine','webpack'],
 
 
     // list of files / patterns to load in the browser
     files: [
-      'src/*.js and test/*.spec.js'
+      'src/**/*.js',
+      'test/**/*.spec.js'
     ],
+
 
 
     // list of files / patterns to exclude
@@ -27,8 +29,27 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://www.npmjs.com/search?q=keywords:karma-preprocessor
     preprocessors: {
+      'src/**/*.js': ['webpack'],
+      'test/**/*.spec.js':['webpack'],
     },
 
+    webpack:{
+      mode:'development',
+      module:{
+        rules:[
+          {
+            test:/\.js$/,
+            exclude: /node_modules/,
+            use:{
+              loader: 'babel-loader',
+              options:{
+                presets:['@babel/preset-env'],
+              },
+            },
+          },
+        ],
+      },
+    },
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
